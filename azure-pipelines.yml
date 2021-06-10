@@ -1,0 +1,22 @@
+# Starter pipeline
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloudCI'
+    organization: 'soaprojectss1'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'soaprojectsS1_Proyecto-1-SOA'
+    cliProjectName: 'Proyecto 1 SOA'
+    cliSources: '.'
+- task: SonarCloudAnalyze@1
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
