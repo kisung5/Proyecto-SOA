@@ -1,25 +1,17 @@
 import * as React from "react";
-import { useState, useEffect } from 'react';
 import * as Path from 'path';
 import uploadFileToBlob, { isStorageConfigured } from './azure-storage-blob';
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Keycloak from 'keycloak-js';
-
+import axios from 'axios';
+import { setUserSession } from './common';
+import {useState} from 'react';
 // Import React Table
 import ReactTable from "react-table-6";
 import "react-table-6/react-table.css"
 import { Button } from "@material-ui/core";
-
 const storageConfigured = isStorageConfigured();
-
-declare global { 
-  interface Window{
-     msCrypto: Crypto;
-  }
-}
 
 export const PageB = (): JSX.Element => {
   // all blobs in container
@@ -27,27 +19,27 @@ export const PageB = (): JSX.Element => {
   const history = useHistory();
   // current file to upload into contobList] = useStainer
   const [fileSelected, setFileSelected] = useState(null);
-
   // UI/form management
   const [uploading, setUploading] = useState(false);
+  const [inputKey, setInputKey] = useState(Math.random().toString(36));
 
-  // === Client side ===
-  const crypto = window.crypto || window.msCrypto;
-  var array = new Uint32Array(1);
-  crypto.getRandomValues(array); // Compliant for security-sensitive use cases
-
-  const [inputKey, setInputKey] = useState(array[0].toString(36));
-  const useStyles = makeStyles({
-    table: {
-      minWidth: 650,
-    },
-  });
-
-  const classes = useStyles();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const onFileChange = (event: any) => {
     // capture file into state
     setFileSelected(event.target.files[0]);
+    console.log("Message" + event.target.files[0]);
+    setError(null);
+    setLoading(true);
+    axios.post('https://localhost:44301/Analysis', { type: 4, fileName: event.target.files[0].name}).then(response => {
+      setLoading(false);
+      setUserSession(response.data.token, response.data.user);
+    }).catch(error => {
+      setLoading(false);
+        if (error.response.status === 401) setError(error.response.data.message);
+        else setError("Something went wrong. Please try again later.");
+      });
   };
 
   const onFileUpload = async () => {
@@ -63,56 +55,41 @@ export const PageB = (): JSX.Element => {
     // reset state/form
     setFileSelected(null);
     setUploading(false);
-    crypto.getRandomValues(array); // Compliant for security-sensitive use cases
-    setInputKey(array[0].toString(36));
+    setInputKey(Math.random().toString(36));
   };
 
-  const onLogout = async () => {
-    const keycloak = Keycloak();
-    keycloak.logout({ redirectUri : "http://localhost:3000/" });
-  };
+      //API Post. Sends file name
+/*   const handleLogin = () => {
+    setError(null);
+    setLoading(true);
+    axios.post('https://localhost:44301/Analysis', { type: 4, fileName: FileName}).then(response => {
+      setLoading(false);
+      setUserSession(response.data.token, response.data.user);
+      //history.push('/Register');
+    }).catch(error => {
+      setLoading(false);
+        if (error.response.status === 401) setError(error.response.data.message);
+        else setError("Something went wrong. Please try again later.");
+      });
+    } */
 
   // display form
   const DisplayForm = () => (
-    <Grid container> 
-      <Grid container item xs={4} justify="flex-start">
-        <Button variant="contained" component="label">
-          <input type="file" onChange={onFileChange} key={inputKey || ''} />
-        </Button>
-        
-        <Button type="submit" onClick={onFileUpload}>
-          Upload file
-        </Button>
-      </Grid>
+    <div>
+      <input type="file" onChange={onFileChange} key={inputKey || ''} />
+      <Button type="submit" onClick={onFileUpload}>
+        Upload file
+          </Button>
 
-      <Grid container item xs={4} justify="center">
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {history.push('/LoadingFile') }}
-        >
-          Analyze document
-        </Button>
-      </Grid>
-      
-
-      <Grid container item xs={3} justify="flex-end">
-        <Button onClick={onLogout} variant="outlined" color="secondary">
-          Logout
-        </Button>
-      </Grid>
-      <Grid item xs={1}></Grid>
-    </Grid>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {history.push('/loadingFile') }}
+      >
+        Analyze document
+      </Button>
+    </div>
   )
-
-  function createData(name: string, calories: number, fat: number, carbs: number, protein: number) {
-    return { name, calories, fat, carbs, protein };
-  }
-  const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-  ];
   
   // display file name and image
   const DisplayImagesFromContainer = () => (
@@ -120,20 +97,19 @@ export const PageB = (): JSX.Element => {
       <h2>Container items</h2>
       <ul>
       <ReactTable
-        data={blobList.map((item) => {
-          return (
-            <li key={item}>
-            </li>
-          );
-        })}
-        
-        columns={[
-          {
+           data={blobList.map((item) => {
+            return (
+              <li key={item}>
+              </li>
+            );
+          })}
+           columns={[
+             {
                Header: "File Name",
                columns: [
                  {
                    accessor: "fileName",
-                   Cell: row => (
+                   Cell: () => (
                      <div style={{ textAlign: "right" }}>{blobList.map((item) => {
                       return (
                         <li key={item}>
@@ -141,6 +117,7 @@ export const PageB = (): JSX.Element => {
                             {Path.basename(item)}
                           </div>
                         </li>
+
                       );
                     })}</div>
                    )
@@ -153,7 +130,7 @@ export const PageB = (): JSX.Element => {
                  {
                    accessor: "status",
  
-                   Cell: row => (
+                   Cell: () => (
                      <div style={{ textAlign: "center" }}>{"Uploaded"}</div>
                    )
                  },
@@ -178,5 +155,3 @@ export const PageB = (): JSX.Element => {
     </div>
   );
 };
-
-
