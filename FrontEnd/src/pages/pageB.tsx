@@ -15,6 +15,12 @@ import { Button } from "@material-ui/core";
 
 const storageConfigured = isStorageConfigured();
 
+declare global { 
+  interface Window{
+     msCrypto: Crypto;
+  }
+}
+
 export const PageB = (): JSX.Element => {
   // all blobs in container
   const [blobList, setBlobList] = useState<string[]>([]);
@@ -24,7 +30,13 @@ export const PageB = (): JSX.Element => {
 
   // UI/form management
   const [uploading, setUploading] = useState(false);
-  const [inputKey, setInputKey] = useState(Math.random().toString(36));
+
+  // === Client side ===
+  const crypto = window.crypto || window.msCrypto;
+  var array = new Uint32Array(1);
+  crypto.getRandomValues(array); // Compliant for security-sensitive use cases
+
+  const [inputKey, setInputKey] = useState(array[0].toString(36));
   const useStyles = makeStyles({
     table: {
       minWidth: 650,
@@ -51,7 +63,8 @@ export const PageB = (): JSX.Element => {
     // reset state/form
     setFileSelected(null);
     setUploading(false);
-    setInputKey(Math.random().toString(36));
+    crypto.getRandomValues(array); // Compliant for security-sensitive use cases
+    setInputKey(array[0].toString(36));
   };
 
   const onLogout = async () => {
