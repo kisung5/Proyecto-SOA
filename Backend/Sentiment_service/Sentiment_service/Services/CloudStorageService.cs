@@ -15,7 +15,8 @@ namespace Sentiment_service.Services
 
         public CloudStorageService()
         {
-            string path = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\appsettings.json";
+            //string path = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\appsettings.json";
+            string path = @"." + Path.DirectorySeparatorChar + "appsettings.json";
 
             StreamReader file = File.OpenText(path);
             JsonTextReader reader = new JsonTextReader(file);
@@ -30,7 +31,8 @@ namespace Sentiment_service.Services
         public async Task DownloadDocumentAsync(string fileName)
         {
             // Creates a local file in the ./Data/ directory for uploading and downloading
-            string localPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/Data/";
+            //string localPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/Data/";
+            string localPath = @"." + Path.DirectorySeparatorChar + "Data" + Path.DirectorySeparatorChar;
             string localFilePath = Path.Combine(localPath, fileName);
 
             // Verifies if the file is already downloaded
