@@ -6,7 +6,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { LoginContainer } from "./pages/login.container";
 import { PageB } from "./pages/pageB";
 import Register from "./pages/register";
-import LoadingFile from "./pages/loadingFile"
+import LoadFile from './pages/loadFile';
 
 interface IState {
   keycloak: KeycloakInstance; //replace any with suitable type
@@ -29,7 +29,7 @@ export default class App extends Component<{}, IState> {
     sessionStorage.setItem('authentication', keycloak.token);
     sessionStorage.setItem('refreshToken', keycloak.refreshToken);
   }
-
+  
   render() {
     if (this.state.keycloak) {
       if (this.state.authenticated) return (
