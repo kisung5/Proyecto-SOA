@@ -3,6 +3,7 @@ import obo
 import PyPDF2
 
 def file_ofen_avg_request(File_Name, Language):
+    texto = ""
     ###### creating a pdf file object #####
     if File_Name[-3:] == 'txt':
         File=open('test.txt','r') # open the file to read

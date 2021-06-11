@@ -1,15 +1,18 @@
 import * as React from "react";
+import { useState, useEffect } from 'react';
 import * as Path from 'path';
 import uploadFileToBlob, { isStorageConfigured } from './azure-storage-blob';
 import { useHistory } from "react-router-dom";
+import { Grid } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Keycloak from 'keycloak-js';
 import axios from 'axios';
 import { setUserSession } from './common';
-import {useState} from 'react';
 // Import React Table
 import ReactTable from "react-table-6";
 import "react-table-6/react-table.css"
 import { Button } from "@material-ui/core";
+
 const storageConfigured = isStorageConfigured();
 
 export const PageB = (): JSX.Element => {
@@ -72,22 +75,42 @@ export const PageB = (): JSX.Element => {
       });
     } */
 
+  const onLogout = async () => {
+    const keycloak = Keycloak();
+    keycloak.logout({ redirectUri : "http://localhost:3000/" });
+  };
+
   // display form
   const DisplayForm = () => (
-    <div>
-      <input type="file" onChange={onFileChange} key={inputKey || ''} />
-      <Button type="submit" onClick={onFileUpload}>
-        Upload file
-          </Button>
+    <Grid container> 
+      <Grid container item xs={4} justify="flex-start">
+        <Button variant="contained" component="label">
+          <input type="file" onChange={onFileChange} key={inputKey || ''} />
+        </Button>
+        
+        <Button type="submit" onClick={onFileUpload}>
+          Upload file
+        </Button>
+      </Grid>
 
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => {history.push('/loadFile') }}
-      >
-        Analyze document
-      </Button>
-    </div>
+      <Grid container item xs={4} justify="center">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {history.push('/loadFile') }}
+        >
+          Analyze document
+        </Button>
+      </Grid>
+      
+
+      <Grid container item xs={3} justify="flex-end">
+        <Button onClick={onLogout} variant="outlined" color="secondary">
+          Logout
+        </Button>
+      </Grid>
+      <Grid item xs={1}></Grid>
+    </Grid>
   )
   
   // display file name and image

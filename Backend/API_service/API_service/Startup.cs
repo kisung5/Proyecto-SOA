@@ -48,7 +48,7 @@ namespace API_service
             });
 
             // RabbitMQ Publisher
-            services.AddSingleton<IConnectionProvider>(new ConnectionProvider("amqp://guest:guest@localhost:5672"));
+            services.AddSingleton<IConnectionProvider>(new ConnectionProvider("amqp://guest:guest@127.0.0.1:5672"));
             services.AddSingleton<IPublisher>(x => new Publisher(x.GetService<IConnectionProvider>(),
                     "request.dx",
                     ExchangeType.Topic));

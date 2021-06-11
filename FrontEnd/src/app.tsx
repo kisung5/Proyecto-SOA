@@ -1,11 +1,8 @@
 import * as React from "react";
 import Keycloak, { KeycloakAdapter, KeycloakInstance } from 'keycloak-js';
-import { useState, useEffect } from "react";
 import { Component } from 'react';
-import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { LoginContainer } from "./pages/login.container";
+import {  HashRouter, Switch, Route, Redirect } from "react-router-dom";
 import { PageB } from "./pages/pageB";
-import Register from "./pages/register";
 import LoadFile from './pages/loadFile';
 
 interface IState {
@@ -33,12 +30,15 @@ export default class App extends Component<{}, IState> {
   render() {
     if (this.state.keycloak) {
       if (this.state.authenticated) return (
-        <BrowserRouter>
-          {/* <Route exact={true} path="/" component={LoginContainer} /> */}
-          <Route path="/" component={PageB} />
-          {/* <Route path="/register" component={Register} /> */}
-          <Route path="/loadFile" component={LoadFile} />
-        </BrowserRouter>
+        <HashRouter>
+          <Switch>
+            <Route exact path="/">
+              <Redirect to="/home" />
+            </Route>
+            <Route path="/home" component={PageB} />
+            <Route path="/loadFile" component={LoadFile} />
+          </Switch>
+        </HashRouter>
       );
       else return (<div>Unable to authenticate!</div>);
     }

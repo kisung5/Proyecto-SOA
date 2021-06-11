@@ -5,6 +5,8 @@ services:
       image: mcr.microsoft.com/mssql/server
       ports:
           - "1433:1433"
+      volumes:
+          - ./sql_volume:/var/opt/mssql/data
       environment:
           - ACCEPT_EULA=Y
           - SA_PASSWORD=Password!23
@@ -23,9 +25,12 @@ services:
           - mssqlscripts
       ports:
           - "8080:8080"
+      volumes:
+          - ./realm-export.json:/realm-export.json
       environment:
           - KEYCLOAK_USER=admin
           - KEYCLOAK_PASSWORD=admin
+          - KEYCLOAK_IMPORT=/realm-export.json
           - DB_VENDOR=mssql
           - DB_USER=sa
           - DB_PASSWORD=Password!23

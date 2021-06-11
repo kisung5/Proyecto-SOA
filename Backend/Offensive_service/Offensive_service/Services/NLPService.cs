@@ -29,7 +29,8 @@ namespace Offensive_service.Services
             // 1) Create process info
             ProcessStartInfo psi = new ProcessStartInfo();
             //psi.FileName = @"C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python37_64\python.exe";
-            psi.FileName = @"C:\Users\nacho\.conda\envs\nlp\python.exe";
+            //psi.FileName = @"C:\Users\nacho\.conda\envs\nlp\python.exe";
+            psi.FileName = "python3";
 
             // 2) Provide scrip and arguments
             psi.Arguments = string.Format("{0} {1} {2}", script, fileName, language);

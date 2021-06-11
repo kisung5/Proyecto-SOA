@@ -1,18 +1,18 @@
 {
   "id": "Employees",
   "realm": "Employees",
-  "notBefore": 1622463726,
+  "notBefore": 1622738917,
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": true,
   "refreshTokenMaxReuse": 0,
   "accessTokenLifespan": 300,
   "accessTokenLifespanForImplicitFlow": 900,
-  "ssoSessionIdleTimeout": 1800,
-  "ssoSessionMaxLifespan": 36000,
-  "ssoSessionIdleTimeoutRememberMe": 600,
+  "ssoSessionIdleTimeout": 900,
+  "ssoSessionMaxLifespan": 18000,
+  "ssoSessionIdleTimeoutRememberMe": 1800,
   "ssoSessionMaxLifespanRememberMe": 300,
   "offlineSessionIdleTimeout": 2592000,
-  "offlineSessionMaxLifespanEnabled": false,
+  "offlineSessionMaxLifespanEnabled": true,
   "offlineSessionMaxLifespan": 5184000,
   "clientSessionIdleTimeout": 900,
   "clientSessionMaxLifespan": 300,
@@ -28,7 +28,7 @@
   "enabled": true,
   "sslRequired": "external",
   "registrationAllowed": true,
-  "registrationEmailAsUsername": false,
+  "registrationEmailAsUsername": true,
   "rememberMe": false,
   "verifyEmail": false,
   "loginWithEmailAllowed": true,
@@ -664,7 +664,7 @@
       "webOrigins": [
         "http://localhost:3000"
       ],
-      "notBefore": 0,
+      "notBefore": 1623384069,
       "bearerOnly": false,
       "consentRequired": false,
       "standardFlowEnabled": true,
@@ -2166,5 +2166,5 @@
     "cibaInterval": "5"
   },
   "keycloakVersion": "13.0.1",
-  "userManagedAccessAllowed": true
+  "userManagedAccessAllowed": false
 }
