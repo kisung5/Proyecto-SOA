@@ -2,7 +2,6 @@ import * as React from "react";
 import * as Path from 'path';
 import uploadFileToBlob, { isStorageConfigured } from './azure-storage-blob';
 import { useHistory } from "react-router-dom";
-import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from 'axios';
 import { setUserSession } from './common';
@@ -84,7 +83,7 @@ export const PageB = (): JSX.Element => {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => {history.push('/loadingFile') }}
+        onClick={() => {history.push('/loadFile') }}
       >
         Analyze document
       </Button>
@@ -155,3 +154,6 @@ export const PageB = (): JSX.Element => {
     </div>
   );
 };
+
+
+

@@ -1,9 +1,5 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import App from "./app";
+import { AppS } from "./app";
 
-ReactDOM.render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>, 
-    document.getElementById("root"));
+ReactDOM.render(<AppS />, document.getElementById("root"));
