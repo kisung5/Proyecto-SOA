@@ -19,6 +19,8 @@ jobs:
         dotnet-version: [ '5.0.x' ]
     steps:
       - uses: actions/checkout@v2
+      - name: Confirm workspace
+        run: ls
       - name: Setup workspace
         run: cd Backend/API_service
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
