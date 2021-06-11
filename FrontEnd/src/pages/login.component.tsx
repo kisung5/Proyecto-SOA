@@ -97,7 +97,6 @@ export const LoginComponent: React.FC<PropsForm> = (props) => {
   );
 };
 
-
 const useFormInput = initialValue => {
   const [value, setValue] = useState(initialValue);
  
