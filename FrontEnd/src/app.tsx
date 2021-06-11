@@ -37,7 +37,7 @@ export default class App extends Component<{}, IState> {
           {/* <Route exact={true} path="/" component={LoginContainer} /> */}
           <Route path="/" component={PageB} />
           {/* <Route path="/register" component={Register} /> */}
-          <Route path="/loadingFile" component={LoadingFile} />
+          <Route path="/loadFile" component={LoadFile} />
         </BrowserRouter>
       );
       else return (<div>Unable to authenticate!</div>);
@@ -46,5 +46,4 @@ export default class App extends Component<{}, IState> {
       <div>Initializing Keycloak...</div>
     );
   }
-  
 };
