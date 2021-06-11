@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Diagnostics;
+using System.Resources;
 
 namespace Offensive_service.Services
 {
@@ -12,9 +13,10 @@ namespace Offensive_service.Services
         public NLPService()
         {
             //_SCRIPT = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\py_src\\main.py";
-            _SCRIPT = Path.Combine(Environment.CurrentDirectory, "py_src", "main.py");
+            //_SCRIPT = Path.Combine(Environment.CurrentDirectory, "py_src", "main.py");
+            _SCRIPT = Path.Combine(@".", "py_src", "main.py");
             //_FILES_DIR = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\Data\\";
-            _FILES_DIR = Path.Combine(Environment.CurrentDirectory, "Data") + Path.DirectorySeparatorChar;
+            _FILES_DIR = Path.Combine(@".", "Data") + Path.DirectorySeparatorChar;
         }
 
         public float offensive_analysis(string fileName, string language = "en")

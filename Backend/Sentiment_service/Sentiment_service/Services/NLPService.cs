@@ -1,9 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Diagnostics;
+using System.Resources;
 using Microsoft.ML;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using Sentiment_service.Models;
+using Path = System.IO.Path;
 
 namespace Sentiment_service.Services
 {
@@ -13,14 +16,15 @@ namespace Sentiment_service.Services
 
         public NLPService()
         {
-            _FILES_DIR = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\Data\\";
+            //_FILES_DIR = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\Data\\";
+            _FILES_DIR = Path.Combine(@".", "Data") + Path.DirectorySeparatorChar;
         }
 
         public float sentiment_analysis(string fileName)
         {
             MLContext context = new MLContext();
 
-            var data = context.Data.LoadFromTextFile<SentimentData>(path: _FILES_DIR + "\\stock_data.csv", 
+            var data = context.Data.LoadFromTextFile<SentimentData>(path: _FILES_DIR + Path.DirectorySeparatorChar + "stock_data.csv", 
                                                                     hasHeader: true, 
                                                                     separatorChar: ',', 
                                                                     allowQuoting: true);

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Sentiment_service": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

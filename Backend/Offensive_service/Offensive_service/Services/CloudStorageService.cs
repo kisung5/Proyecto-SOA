@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Resources;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Azure.Storage.Blobs;
@@ -15,8 +16,8 @@ namespace Offensive_service.Services
 
         public CloudStorageService()
         {
-            string path = Environment.CurrentDirectory;
-            path += Path.DirectorySeparatorChar + "appsettings.json";
+            string path = @"." + Path.DirectorySeparatorChar + "appsettings.json" /*= Environment.CurrentDirectory*/;
+            //path += Path.DirectorySeparatorChar + "appsettings.json";
             Console.WriteLine(path);
             //string path = Directory.GetParent(env).Parent.Parent.FullName;
             //string path = Directory.GetParent(env).FullName;
@@ -35,7 +36,8 @@ namespace Offensive_service.Services
         public async Task DownloadDocumentAsync(string fileName)
         {
             // Creates a local file in the ./Data/ directory for uploading and downloading
-            string localPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/Data/";
+            //string localPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "/Data/";
+            string localPath = @"." + Path.DirectorySeparatorChar + "Data" + Path.DirectorySeparatorChar;
             string localFilePath = Path.Combine(localPath, fileName);
              
             // Verifies if the file is already downloaded

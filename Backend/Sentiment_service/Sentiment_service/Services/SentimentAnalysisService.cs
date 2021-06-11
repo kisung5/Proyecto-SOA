@@ -31,7 +31,8 @@ namespace Sentiment_service.Services
             _AZURE_STORAGE = new CloudStorageService();
             _NLP = new NLPService();
 
-            StreamReader file = File.OpenText(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\appsettings.json");
+            //StreamReader file = File.OpenText(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName + "\\appsettings.json");
+            StreamReader file = File.OpenText(@"." + Path.DirectorySeparatorChar + "appsettings.json");
             JsonTextReader reader = new JsonTextReader(file);
 
             JObject configFile = (JObject)JToken.ReadFrom(reader);
