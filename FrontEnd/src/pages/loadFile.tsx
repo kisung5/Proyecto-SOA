@@ -7,8 +7,10 @@ import { messageHandler, logoutHandler } from '../Utility/MessageHandler'
 import 'antd/dist/antd.css';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
-var client = new WebSocket('ws://localhost:5000/ws')  
+var client = new WebSocket('ws://localhost:5000/ws')
+
 const theme = createMuiTheme({
   palette: {
     type: "dark"
@@ -37,6 +39,7 @@ export default class LoadFile extends Component{
     formFields: [],
     userList : [],
     newOpen: false,
+    dataFromAPI: {}
   }
   
   handleLogout = () => {
@@ -47,11 +50,7 @@ export default class LoadFile extends Component{
       logout: true
     })
   }
-  handleNewDialogClose = () => {
-    this.setState({
-      newOpen: false
-    })
-  }
+
 
   handleFormHistory = (formData) => {
     console.log("To update the forms: ", formData)
@@ -59,15 +58,19 @@ export default class LoadFile extends Component{
       formFields: formData
     })
   }
-  openEventListener = (event) => {
+  openEventListener = async (event) => {
     let obj = hasCookie()
     this.setState({ws: client, disconnected: false})
     console.log('Websocket Client Connected')
+    
     client.send(JSON.stringify({
       messageType: 'room entry',
       entryToken: obj.entryToken
     }))
+
   }
+
+  
 
   closeSocket = (event) => {
     console.log("You are disconnected")
@@ -81,10 +84,23 @@ export default class LoadFile extends Component{
       }
     }, 5000)
   }
-  componentDidMount() {
+  async componentDidMount() {
     client.addEventListener('open', this.openEventListener)
     client.addEventListener('close', this.closeSocket)
+    client.onmessage = (msg) => {
+      console.log("Message: " + msg.data);
+      try {
+  
+          //Parse the message
+          let obj = JSON.parse(msg.data);
+          this.setState({chartData: obj});
+  
+      }catch(err){
+          console.log('Error in onmessage: ' + err);
+      }
+    }
     console.log("in component mount");
+   // const res = await axios.get('https://localhost:5001/Documents');
     // get information from user
   }
 

@@ -31,10 +31,10 @@ export const PageB = (): JSX.Element => {
   const onFileChange = (event: any) => {
     // capture file into state
     setFileSelected(event.target.files[0]);
-    console.log("Message" + event.target.files[0]);
+
     setError(null);
     setLoading(true);
-    axios.post('https://localhost:44301/Analysis', { type: 4, fileName: event.target.files[0].name}).then(response => {
+    axios.post('https://localhost:5001/Analysis', { type: 4, fileName: event.target.files[0].name}).then(response => {
       setLoading(false);
       setUserSession(response.data.token, response.data.user);
     }).catch(error => {
@@ -59,21 +59,6 @@ export const PageB = (): JSX.Element => {
     setUploading(false);
     setInputKey(Math.random().toString(36));
   };
-
-      //API Post. Sends file name
-/*   const handleLogin = () => {
-    setError(null);
-    setLoading(true);
-    axios.post('https://localhost:44301/Analysis', { type: 4, fileName: FileName}).then(response => {
-      setLoading(false);
-      setUserSession(response.data.token, response.data.user);
-      //history.push('/Register');
-    }).catch(error => {
-      setLoading(false);
-        if (error.response.status === 401) setError(error.response.data.message);
-        else setError("Something went wrong. Please try again later.");
-      });
-    } */
 
   const onLogout = async () => {
     const keycloak = Keycloak();
