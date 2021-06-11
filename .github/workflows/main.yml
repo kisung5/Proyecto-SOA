@@ -21,20 +21,23 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check workspace
         run: ls
-      - name: Setup workspace
-        run: cd Backend/API_service
       - name: Confirm workspace
         run: ls
+        working-directory: Backend/API_service
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+        working-directory: Backend/API_service
       - name: Install dependencies
         run: dotnet restore
+        working-directory: Backend/API_service
       - name: Build
         run: dotnet build --configuration Release --no-restore
+        working-directory: Backend/API_service
       - name: Test
         run: dotnet test --no-restore --verbosity normal
+        working-directory: Backend/API_service
   
   offensive-service:
     name: Net Service Build 
@@ -46,20 +49,51 @@ jobs:
       - uses: actions/checkout@v2
       - name: Check workspace
         run: ls
-      - name: Setup workspace
-        run: cd Backend/API_service
       - name: Confirm workspace
         run: ls
+        working-directory: Backend/Offensive_service
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+        working-directory: Backend/Offensive_service
       - name: Install dependencies
         run: dotnet restore
+        working-directory: Backend/Offensive_service
       - name: Build
         run: dotnet build --configuration Release --no-restore
+        working-directory: Backend/Offensive_service
       - name: Test
         run: dotnet test --no-restore --verbosity normal
+        working-directory: Backend/Offensive_service
+
+  sentiment-service:
+    name: Net Sentiment Service Build 
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '3.1.x' ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check workspace
+        run: ls
+      - name: Confirm workspace
+        run: ls
+        working-directory: Backend/Sentiment_service
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+        working-directory: Backend/Sentiment_service
+      - name: Install dependencies
+        run: dotnet restore
+        working-directory: Backend/Sentiment_service
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+        working-directory: Backend/Sentiment_service
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
+        working-directory: Backend/Sentiment_service
 
   sonarcloud:
     name: SonarCloud
