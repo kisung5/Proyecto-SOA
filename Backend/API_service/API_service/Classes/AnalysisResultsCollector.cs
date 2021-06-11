@@ -1,6 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Net.WebSockets;
+using System.Text;
+using Newtonsoft.Json;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Linq;
 using Plain.RabbitMQ;
@@ -13,11 +16,15 @@ namespace API_service.Classes
     {
         private readonly ISubscriber _subscriber;
         private readonly DocumentService _documentService;
+        private static WebSocket _webSocket;
+        private static TaskCompletionSource<object> _socketFinishedTcs;
 
         public AnalysisResultsCollector(ISubscriber subscriber, DocumentService documentService)
         {
             _subscriber = subscriber;
             _documentService = documentService;
+            _webSocket = null;
+            _socketFinishedTcs = null;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -69,7 +76,20 @@ namespace API_service.Classes
             else
                 _documentService.Create(document);
 
+            SendMessageWebSocket(document);
+
             return true;
+        }
+
+        private static async void SendMessageWebSocket(Document document)
+        {
+            var message = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(document));
+
+            if (_webSocket != null && _webSocket.State == WebSocketState.Open)
+            {
+                await _webSocket.SendAsync(message, WebSocketMessageType.Text, true, CancellationToken.None);
+                _socketFinishedTcs.TrySetResult(null);
+            }
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -77,5 +97,10 @@ namespace API_service.Classes
             return Task.CompletedTask;
         }
 
+        public static void AddSocket(WebSocket webSocket, TaskCompletionSource<object> socketFinishedTcs)
+        {
+            _webSocket = webSocket;
+            _socketFinishedTcs = socketFinishedTcs;
+        }
     }
 }
