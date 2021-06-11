@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using API_service.Services;
 using API_service.Models;
+using System;
 
 namespace API_service.Controllers
 {
@@ -18,11 +19,13 @@ namespace API_service.Controllers
         [HttpGet]
         public IActionResult GetAllDocuments()
         {
+            Console.WriteLine("Hellow");
+
             // Gets the list of documents from the database
             return Ok(_documentService.Get());
         }
 
-        [HttpGet("{id:length(24)}")]
+        /*[HttpGet("{id:length(24)}")]
         public IActionResult GetDocumentById(string id)
         {
             // Gets a specific document from the database 
@@ -32,7 +35,7 @@ namespace API_service.Controllers
                 return NotFound();
 
             return Ok(document);
-        }
+        }*/
 
         [HttpGet("{name}")]
         public IActionResult GetDocumentByName(string name)
