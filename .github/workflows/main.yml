@@ -104,9 +104,6 @@ jobs:
       - name: Install dependencies
         run: npm i
         working-directory: webSocketServer
-      - name: Build
-        run: npm start
-        working-directory: webSocketServer
       - name: Test
         run: npm test
         working-directory: webSocketServer
