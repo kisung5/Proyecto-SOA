@@ -68,9 +68,6 @@ jobs:
   sentiment-service:
     name: Net Sentiment Service Build 
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        dotnet-version: [ '3.1.x' ]
     steps:
       - uses: actions/checkout@v2
       - name: Check workspace
@@ -78,10 +75,10 @@ jobs:
       - name: Confirm workspace
         run: ls
         working-directory: Backend/Sentiment_service
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+      - name: Setup .NET Core SDK 3.1.x
         uses: actions/setup-dotnet@v1.7.2
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
+          dotnet-version: 3.1.x
       - name: Install dependencies
         run: dotnet restore
         working-directory: Backend/Sentiment_service
@@ -91,6 +88,47 @@ jobs:
       - name: Test
         run: dotnet test --no-restore --verbosity normal
         working-directory: Backend/Sentiment_service
+
+  websockets:
+    name: WebSockets Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+      - name: Check workspace
+        run: ls
+      - name: Confirm workspace
+        run: ls
+        working-directory: webSocketServer
+      - name: Install dependencies
+        run: npm i
+        working-directory: webSocketServer
+      - name: Build
+        run: npm start
+        working-directory: webSocketServer
+      - name: Test
+        run: npm test
+        working-directory: webSocketServer
+
+  frontend:
+    name: FrontEnd Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+      - name: Check workspace
+        run: ls
+      - name: Confirm workspace
+        run: ls
+        working-directory: FrontEnd
+      - name: Install dependencies
+        run: npm i
+        working-directory: FrontEnd
+      - name: Build
+        run: npm run build
+        working-directory: FrontEnd
 
   sonarcloud:
     name: SonarCloud
