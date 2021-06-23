@@ -25,7 +25,7 @@ steps:
   inputs:
     command: 'build'
     projects: './Backend/API_service'
-    
+
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
