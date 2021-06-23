@@ -10,22 +10,45 @@ steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
-- script: |
-    echo "Building the Web API"
-    cd ./Backend/API_service
-    dotnet build
-  displayName: 'dotnet build'
+# - script: |
+#     echo "Building the Web API"
+#     cd ./Backend/API_service
+#     dotnet build
+#   displayName: 'dotnet build'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: './Backend/Offensive_service'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: './Backend/API_service'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: './Backend/Sentiment_service'
 
 - task: NodeTool@0
   inputs:
-    versionSpec: '10.x'
+    versionSpec: '14.16.0'
   displayName: 'Install Node.js'
 
 - script: |
-    echo "Building the Web App"
+    echo "Installing npm dependencies"
+    ls
     cd ./FrontEnd
-    npm i && npm run build
-  displayName: 'npm install and build'
+    npm i
+  displayName: 'npm install'
+
+- script: |
+    echo "Building web app with npm"
+    ls
+    cd ./FrontEnd
+  displayName: 'npm build'
+
 
 - task: SonarCloudPrepare@1
   inputs:
