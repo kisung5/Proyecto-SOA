@@ -25,23 +25,17 @@ export const PageB = (): JSX.Element => {
   const [uploading, setUploading] = useState(false);
   const [inputKey, setInputKey] = useState(Math.random().toString(36));
 
+  const [filename, setFileName] = useState('');
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const onFileChange = (event: any) => {
     // capture file into state
     setFileSelected(event.target.files[0]);
-
+    setFileName(event.target.files[0].name);
     setError(null);
     setLoading(true);
-    axios.post('https://localhost:5001/Analysis', { type: 4, fileName: event.target.files[0].name}).then(response => {
-      setLoading(false);
-      setUserSession(response.data.token, response.data.user);
-    }).catch(error => {
-      setLoading(false);
-        if (error.response.status === 401) setError(error.response.data.message);
-        else setError("Something went wrong. Please try again later.");
-      });
   };
 
   const onFileUpload = async () => {
@@ -82,7 +76,18 @@ export const PageB = (): JSX.Element => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => {history.push('/loadFile') }}
+          onClick={() => 
+            {
+              history.push('/loadFile');
+              axios.post('https://localhost:5001/Analysis', { type: 4, fileName: filename}).then(response => {
+                setLoading(false);
+                setUserSession(response.data.token, response.data.user);
+              }).catch(error => {
+                setLoading(false);
+                  if (error.response.status === 401) setError(error.response.data.message);
+                  else setError("Something went wrong. Please try again later.");
+              });
+            }}
         >
           Analyze document
         </Button>

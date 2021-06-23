@@ -33,7 +33,7 @@
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "publishAllPorts": true,
       "useSSL": true,
-      "DockerfileRunArguments": "-p 9016:80 -p 9017:443"
+      "DockerfileRunArguments": "-p 5000:80 -p 5001:443"
     }
   }
 }

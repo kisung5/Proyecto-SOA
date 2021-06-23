@@ -5,7 +5,7 @@
   "main": "node index.js",
   "scripts": {
     "start": "webpack-dev-server  --mode development --inline --hot --open",
-    "build": "webpack  --mode development"
+    "build": "webpack --mode production"
   },
   "keywords": [
     "react",
@@ -48,6 +48,7 @@
     "antd": "^4.16.0",
     "axios": "^0.21.1",
     "babel-preset-es2015": "^6.24.1",
+    "core-js": "^3.15.1",
     "development": "0.0.6",
     "event-emitter": "^0.3.5",
     "express": "^4.17.1",
