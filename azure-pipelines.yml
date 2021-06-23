@@ -7,8 +7,25 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+
+- task: DockerInstaller@0
+  inputs:
+    dockerVersion: '17.09.0-ce'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: './Backend/API_service'
+  displayName: 'Build API'
+  
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Ki Sung''s DockerHub Registry'
+    repository: 'ksnonsteal/apiservice'
+    command: 'buildAndPush'
+    Dockerfile: './Backend/API_service/API_service/Dockerfile'
+    buildContext: './Backend/API_service/'
+  displayName: 'Build image and push API service'
 
 - task: DotNetCoreCLI@2
   inputs:
@@ -16,22 +33,30 @@ steps:
     projects: './Backend/Offensive_service'
   displayName: 'Build Offensive Service'
 
-- task: DotNetCoreCLI@2
+- task: Docker@2
   inputs:
-    command: 'build'
-    projects: './Backend/API_service'
-  displayName: 'Build API'
-
+    containerRegistry: 'Ki Sung''s DockerHub Registry'
+    repository: 'ksnonsteal/offensiveservice'
+    command: 'buildAndPush'
+    Dockerfile: './Backend/Offensive_service/Offensive_service/Dockerfile'
+    buildContext: './Backend/Offensive_service/'
+  displayName: 'Build image and push Offensive service'
+  
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
     projects: './Backend/Sentiment_service'
   displayName: 'Build Sentiment Service'
 
-- task: DockerInstaller@0
+- task: Docker@2
   inputs:
-    dockerVersion: '17.09.0-ce'
-
+    containerRegistry: 'Ki Sung''s DockerHub Registry'
+    repository: 'ksnonsteal/sentimentservice'
+    command: 'buildAndPush'
+    Dockerfile: './Backend/Sentiment_service/Sentiment_service/Dockerfile'
+    buildContext: './Backend/Sentiment_service/'
+  displayName: 'Build image and push Sentiment service'
+  
 - task: Docker@2
   inputs:
     containerRegistry: 'Ki Sung''s DockerHub Registry'
@@ -41,24 +66,13 @@ steps:
     buildContext: './FrontEnd/'
   displayName: 'Build web app in web server image container and publish'
 
-# - task: NodeTool@0
-#   inputs:
-#     versionSpec: '14.16.0'
-#   displayName: 'Install Node.js'
-
-# - script: |
-#     echo "Installing npm dependencies"
-#     ls
-#     cd ./FrontEnd
-#     npm i
-#   displayName: 'npm install'
-
-# - script: |
-#     echo "Building web app with npm"
-#     ls
-#     cd ./FrontEnd
-#     npm run build
-#   displayName: 'npm build'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Ki Sung''s DockerHub Registry'
+    repository: 'ksnonsteal/my-rabbit'
+    command: 'buildAndPush'
+    Dockerfile: './rabbitmq_docker/Dockerfile'
+    buildContext: './rabbitmq_docker/'
 
 - task: SonarCloudPrepare@1
   inputs:
