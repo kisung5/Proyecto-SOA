@@ -24,7 +24,7 @@ steps:
 - script: |
     echo "Building the Web App"
     cd ./FrontEnd
-    npm i & npm run build
+    npm i && npm run build
   displayName: 'npm install and build'
 
 - task: SonarCloudPrepare@1
