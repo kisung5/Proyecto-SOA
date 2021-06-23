@@ -10,26 +10,23 @@ steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
-# - script: |
-#     echo "Building the Web API"
-#     cd ./Backend/API_service
-#     dotnet build
-#   displayName: 'dotnet build'
-
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
     projects: './Backend/Offensive_service'
+  displayName: 'Build Offensive Service'
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
     projects: './Backend/API_service'
+  displayName: 'Build API'
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
     projects: './Backend/Sentiment_service'
+  displayName: 'Build Sentiment Service'
 
 - task: NodeTool@0
   inputs:
@@ -47,6 +44,7 @@ steps:
     echo "Building web app with npm"
     ls
     cd ./FrontEnd
+    npm run build
   displayName: 'npm build'
 
 
