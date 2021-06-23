@@ -28,25 +28,37 @@ steps:
     projects: './Backend/Sentiment_service'
   displayName: 'Build Sentiment Service'
 
-- task: NodeTool@0
+- task: DockerInstaller@0
   inputs:
-    versionSpec: '14.16.0'
-  displayName: 'Install Node.js'
+    dockerVersion: '17.09.0-ce'
 
-- script: |
-    echo "Installing npm dependencies"
-    ls
-    cd ./FrontEnd
-    npm i
-  displayName: 'npm install'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Ki Sung''s DockerHub Registry'
+    repository: 'ksnonsteal/my-webserver'
+    command: 'buildAndPush'
+    Dockerfile: './FrontEnd/Dockerfile'
+    buildContext: './FrontEnd/'
+  displayName: 'Build web app in web server image container and publish'
 
-- script: |
-    echo "Building web app with npm"
-    ls
-    cd ./FrontEnd
-    npm run build
-  displayName: 'npm build'
+# - task: NodeTool@0
+#   inputs:
+#     versionSpec: '14.16.0'
+#   displayName: 'Install Node.js'
 
+# - script: |
+#     echo "Installing npm dependencies"
+#     ls
+#     cd ./FrontEnd
+#     npm i
+#   displayName: 'npm install'
+
+# - script: |
+#     echo "Building web app with npm"
+#     ls
+#     cd ./FrontEnd
+#     npm run build
+#   displayName: 'npm build'
 
 - task: SonarCloudPrepare@1
   inputs:
