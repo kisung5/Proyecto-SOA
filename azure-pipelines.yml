@@ -22,10 +22,18 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    echo "Building the Web App"
+    echo "Installing npm dependencies"
+    ls
     cd ./FrontEnd
-    npm i & npm run build
-  displayName: 'npm install and build'
+    npm i
+  displayName: 'npm install'
+
+- script: |
+    echo "Building web app with npm"
+    ls
+    cd ./FrontEnd
+    npm run build
+  displayName: 'npm build'
 
 - task: SonarCloudPrepare@1
   inputs:
