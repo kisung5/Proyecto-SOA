@@ -47,8 +47,8 @@ steps:
     echo "Building web app with npm"
     ls
     cd ./FrontEnd
-    npm run build
   displayName: 'npm build'
+
 
 - task: SonarCloudPrepare@1
   inputs:
