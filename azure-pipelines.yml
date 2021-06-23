@@ -10,11 +10,26 @@ steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
-- script: |
-    echo "Building the Web API"
-    cd ./Backend/API_service
-    dotnet build
-  displayName: 'dotnet build'
+# - script: |
+#     echo "Building the Web API"
+#     cd ./Backend/API_service
+#     dotnet build
+#   displayName: 'dotnet build'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: './Backend/Offensive_service'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: './Backend/API_service'
+    
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: './Backend/Sentiment_service'
 
 - task: NodeTool@0
   inputs:
