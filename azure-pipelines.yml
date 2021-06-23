@@ -74,6 +74,14 @@ steps:
     Dockerfile: './rabbitmq_docker/Dockerfile'
     buildContext: './rabbitmq_docker/'
 
+- task: Docker@2
+  inputs:
+    containerRegistry: 'Ki Sung''s DockerHub Registry'
+    repository: 'my-websocketserver'
+    command: 'buildAndPush'
+    Dockerfile: './webSocketServer/Dockerfile'
+    buildContext: './webSocketServer/'
+
 - task: SonarCloudPrepare@1
   inputs:
     SonarCloud: 'SonarCloudCI'
