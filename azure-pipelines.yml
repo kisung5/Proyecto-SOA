@@ -25,6 +25,7 @@ steps:
     command: 'buildAndPush'
     Dockerfile: './Backend/API_service/API_service/Dockerfile'
     buildContext: './Backend/API_service/'
+    tags: 'latest'
   displayName: 'Build image and push API service'
 
 - task: DotNetCoreCLI@2
@@ -40,6 +41,7 @@ steps:
     command: 'buildAndPush'
     Dockerfile: './Backend/Offensive_service/Offensive_service/Dockerfile'
     buildContext: './Backend/Offensive_service/'
+    tags: 'latest'
   displayName: 'Build image and push Offensive service'
   
 - task: DotNetCoreCLI@2
@@ -55,6 +57,7 @@ steps:
     command: 'buildAndPush'
     Dockerfile: './Backend/Sentiment_service/Sentiment_service/Dockerfile'
     buildContext: './Backend/Sentiment_service/'
+    tags: 'latest'
   displayName: 'Build image and push Sentiment service'
   
 - task: Docker@2
@@ -64,6 +67,7 @@ steps:
     command: 'buildAndPush'
     Dockerfile: './FrontEnd/Dockerfile'
     buildContext: './FrontEnd/'
+    tags: 'latest'
   displayName: 'Build web app in web server image container and publish'
 
 - task: Docker@2
@@ -73,6 +77,8 @@ steps:
     command: 'buildAndPush'
     Dockerfile: './rabbitmq_docker/Dockerfile'
     buildContext: './rabbitmq_docker/'
+    tags: 'latest'
+  displayName: 'Build rabbitmq image container and publish'
 
 - task: Docker@2
   inputs:
@@ -81,6 +87,8 @@ steps:
     command: 'buildAndPush'
     Dockerfile: './webSocketServer/Dockerfile'
     buildContext: './webSocketServer/'
+    tags: 'latest'
+  displayName: 'Build websocketserver image container and publish'
 
 - task: SonarCloudPrepare@1
   inputs:
