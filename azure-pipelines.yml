@@ -3,103 +3,135 @@
 trigger:
 - main
 
-pool:
-  vmImage: ubuntu-latest
+stages:
+- stage: Build and Containerize
+  jobs:
+  - job: SonarCloud
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'SonarCloudCI'
+        organization: 'soaprojectss1'
+        scannerMode: 'CLI'
+        configMode: 'manual'
+        cliProjectKey: 'soaprojectsS1_Proyecto-1-SOA'
+        cliProjectName: 'Proyecto 1 SOA'
+        cliSources: '.'
+    - task: SonarCloudAnalyze@1
+    - task: SonarCloudPublish@1
+      inputs:
+        pollingTimeoutSec: '300'
 
-steps:
 
-- task: DockerInstaller@0
-  inputs:
-    dockerVersion: '17.09.0-ce'
+  - job: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: DockerInstaller@0
+      inputs:
+        dockerVersion: '17.09.0-ce'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: './Backend/API_service'
-  displayName: 'Build API'
-  
-- task: Docker@2
-  inputs:
-    containerRegistry: 'Ki Sung''s DockerHub Registry'
-    repository: 'ksnonsteal/apiservice'
-    command: 'buildAndPush'
-    Dockerfile: './Backend/API_service/API_service/Dockerfile'
-    buildContext: './Backend/API_service/'
-    tags: 'latest'
-  displayName: 'Build image and push API service'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: './Backend/API_service'
+      displayName: 'Build API'
+      
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Ki Sung''s DockerHub Registry'
+        repository: 'ksnonsteal/apiservice'
+        command: 'buildAndPush'
+        Dockerfile: './Backend/API_service/API_service/Dockerfile'
+        buildContext: './Backend/API_service/'
+        tags: 'latest'
+      displayName: 'Build image and push API service'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: './Backend/Offensive_service'
-  displayName: 'Build Offensive Service'
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: './Backend/Offensive_service'
+      displayName: 'Build Offensive Service'
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'Ki Sung''s DockerHub Registry'
-    repository: 'ksnonsteal/offensiveservice'
-    command: 'buildAndPush'
-    Dockerfile: './Backend/Offensive_service/Offensive_service/Dockerfile'
-    buildContext: './Backend/Offensive_service/'
-    tags: 'latest'
-  displayName: 'Build image and push Offensive service'
-  
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: './Backend/Sentiment_service'
-  displayName: 'Build Sentiment Service'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Ki Sung''s DockerHub Registry'
+        repository: 'ksnonsteal/offensiveservice'
+        command: 'buildAndPush'
+        Dockerfile: './Backend/Offensive_service/Offensive_service/Dockerfile'
+        buildContext: './Backend/Offensive_service/'
+        tags: 'latest'
+      displayName: 'Build image and push Offensive service'
+      
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: './Backend/Sentiment_service'
+      displayName: 'Build Sentiment Service'
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'Ki Sung''s DockerHub Registry'
-    repository: 'ksnonsteal/sentimentservice'
-    command: 'buildAndPush'
-    Dockerfile: './Backend/Sentiment_service/Sentiment_service/Dockerfile'
-    buildContext: './Backend/Sentiment_service/'
-    tags: 'latest'
-  displayName: 'Build image and push Sentiment service'
-  
-- task: Docker@2
-  inputs:
-    containerRegistry: 'Ki Sung''s DockerHub Registry'
-    repository: 'ksnonsteal/my-webserver'
-    command: 'buildAndPush'
-    Dockerfile: './FrontEnd/Dockerfile'
-    buildContext: './FrontEnd/'
-    tags: 'latest'
-  displayName: 'Build web app in web server image container and publish'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Ki Sung''s DockerHub Registry'
+        repository: 'ksnonsteal/sentimentservice'
+        command: 'buildAndPush'
+        Dockerfile: './Backend/Sentiment_service/Sentiment_service/Dockerfile'
+        buildContext: './Backend/Sentiment_service/'
+        tags: 'latest'
+      displayName: 'Build image and push Sentiment service'
+      
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Ki Sung''s DockerHub Registry'
+        repository: 'ksnonsteal/my-webserver'
+        command: 'buildAndPush'
+        Dockerfile: './FrontEnd/Dockerfile'
+        buildContext: './FrontEnd/'
+        tags: 'latest'
+      displayName: 'Build web app in web server image container and publish'
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'Ki Sung''s DockerHub Registry'
-    repository: 'ksnonsteal/my-rabbit'
-    command: 'buildAndPush'
-    Dockerfile: './rabbitmq_docker/Dockerfile'
-    buildContext: './rabbitmq_docker/'
-    tags: 'latest'
-  displayName: 'Build rabbitmq image container and publish'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Ki Sung''s DockerHub Registry'
+        repository: 'ksnonsteal/my-rabbit'
+        command: 'buildAndPush'
+        Dockerfile: './rabbitmq_docker/Dockerfile'
+        buildContext: './rabbitmq_docker/'
+        tags: 'latest'
+      displayName: 'Build rabbitmq image container and publish'
 
-- task: Docker@2
-  inputs:
-    containerRegistry: 'Ki Sung''s DockerHub Registry'
-    repository: 'ksnonsteal/my-websocketserver'
-    command: 'buildAndPush'
-    Dockerfile: './webSocketServer/Dockerfile'
-    buildContext: './webSocketServer/'
-    tags: 'latest'
-  displayName: 'Build websocketserver image container and publish'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Ki Sung''s DockerHub Registry'
+        repository: 'ksnonsteal/my-websocketserver'
+        command: 'buildAndPush'
+        Dockerfile: './webSocketServer/Dockerfile'
+        buildContext: './webSocketServer/'
+        tags: 'latest'
+      displayName: 'Build websocketserver image container and publish'
 
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: 'SonarCloudCI'
-    organization: 'soaprojectss1'
-    scannerMode: 'CLI'
-    configMode: 'manual'
-    cliProjectKey: 'soaprojectsS1_Proyecto-1-SOA'
-    cliProjectName: 'Proyecto 1 SOA'
-    cliSources: '.'
-- task: SonarCloudAnalyze@1
-- task: SonarCloudPublish@1
-  inputs:
-    pollingTimeoutSec: '300'
+- stage: Deploy Staging
+  jobs:
+    - deployment: Deploy
+      displayName: deploy Web App
+      pool:
+        vmImage: ubuntu-latest
+      # Records deployment against bookings resource - Kubernetes namespace.
+      environment: 'Staging-default'
+      strategy: 
+        runOnce:
+          deploy:
+            steps:
+            - task: KubernetesManifest@0
+              displayName: Deploy to Kubernetes cluster
+              inputs:
+                action: deploy
+                # namespace: $(k8sNamespace)
+                kubernetesServiceConnection: 'Staging-documentAnalyzer-staging-default-1624569679388'
+                # manifests: |
+                #   $(System.ArtifactsDirectory)/manifests/*
+                # imagePullSecrets: |
+                #   $(imagePullSecret)
+                # containers: |
+                #   $(containerRegistry)/$(imageRepository):$(tag)
