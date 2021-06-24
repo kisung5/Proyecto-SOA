@@ -111,7 +111,7 @@ stages:
         tags: 'latest'
       displayName: 'Build websocketserver image container and publish'
 
-- stage: Deploy Staging
+- stage: deploy_staging
   jobs:
     - deployment: Deploy
       displayName: deploy Web App
