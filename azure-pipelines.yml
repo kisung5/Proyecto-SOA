@@ -77,7 +77,7 @@ steps:
 - task: Docker@2
   inputs:
     containerRegistry: 'Ki Sung''s DockerHub Registry'
-    repository: 'my-websocketserver'
+    repository: 'ksnonsteal/my-websocketserver'
     command: 'buildAndPush'
     Dockerfile: './webSocketServer/Dockerfile'
     buildContext: './webSocketServer/'
