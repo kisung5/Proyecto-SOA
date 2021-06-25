@@ -111,14 +111,14 @@ stages:
         tags: 'latest'
       displayName: 'Build websocketserver image container and publish'
 
-- stage: Deploy Staging
+- stage: Staging
   jobs:
     - deployment: Deploy
       displayName: deploy Web App
       pool:
         vmImage: ubuntu-latest
       # Records deployment against bookings resource - Kubernetes namespace.
-      environment: 'Staging-default'
+      environment: 'Staging'
       strategy: 
         runOnce:
           deploy:
