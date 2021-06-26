@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak
+spec:
+  selector:
+    matchLabels:
+      app: keycloak
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: keycloak
+    spec:
+      containers:
+      - name: keycloak
+        image: jboss/keycloak
+        ports:
+          - containerPort: 8080
+        volumeMounts:
+          - name: configfile
+            mountPath: /realm-export.json
+        env:
+          - name: KEYCLOAK_USER
+            value: admin
+          - name: KEYCLOAK_PASSWORD
+            value: admin
+          - name: KEYCLOAK_IMPORT
+            value: /realm-export.json
+          - name: DB_VENDOR
+            value: mssql
+          - name: DB_USER
+            value: ksnonsteal@documentanalyzer
+          - name: DB_PASSWORD
+            value: Mieogawa12345
+          - name: DB_ADDR
+            value: documentanalyzer.database.windows.net
+          - name: DB_DATABASE
+            value: DocumentAnalyzer
+      volumes:
+      - name: configfile
+        hostPath:
+          path: /mnt/realm-export.json
+          type: File 
