@@ -1,6 +1,6 @@
 {
   "realm": "Employees",
-  "auth-server-url": "http://localhost:14393/auth/",
+  "auth-server-url": "http://localhost:8080/auth/",
   "ssl-required": "external",
   "resource": "my-react-client",
   "public-client": true,

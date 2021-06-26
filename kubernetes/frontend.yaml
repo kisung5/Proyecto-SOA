@@ -30,7 +30,7 @@ metadata:
   name: frontend
   namespace: default
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: frontend
   ports:
@@ -38,4 +38,4 @@ spec:
       port: 80
       targetPort: 80
       protocol: TCP
-      nodePort: 31180
+      # nodePort: 31180
