@@ -111,7 +111,7 @@ stages:
         tags: 'latest'
       displayName: 'Build websocketserver image container and publish'
 
-# - stage: deploy_staging
+# - stage: Staging
 #   jobs:
 #     - deployment: Deploy
 #       displayName: deploy Web App
@@ -127,6 +127,7 @@ stages:
 #               displayName: Deploy to Kubernetes cluster
 #               inputs:
 #                 action: deploy
+
                 # namespace: $(k8sNamespace)
                 # kubernetesServiceConnection: 'Staging-documentAnalyzer-staging-default-1624569679388'
                 # manifests: |
