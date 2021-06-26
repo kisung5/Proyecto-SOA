@@ -35,7 +35,7 @@ spec:
     app: frontend
   ports:
     - name: webapp
-      port: 80
+      port: 8050
       targetPort: 80
       protocol: TCP
       # nodePort: 31180
