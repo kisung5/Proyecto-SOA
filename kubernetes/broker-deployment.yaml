@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broker
+spec:
+  selector:
+    matchLabels:
+      app: broker
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: broker
+    spec:
+      containers:
+      # RABBITMQ
+      - name: broker 
+        image: ksnonsteal/my-rabbit:latest
+        ports:
+        - containerPort: 15672
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: broker
+  namespace: default
+spec:
+  ports:
+    - name: ui
+      protocol: TCP
+      port: 15672
+      targetPort: 15672
+      nodePort: 31112
+    - name: service
+      port: 5672
+      targetPort: 5672
+      protocol: TCP
+      nodePort: 31111
+  selector:
+    app: broker
+  type: NodePort

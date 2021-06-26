@@ -111,24 +111,25 @@ stages:
         tags: 'latest'
       displayName: 'Build websocketserver image container and publish'
 
-- stage: Staging
-  jobs:
-    - deployment: Deploy
-      displayName: deploy Web App
-      pool:
-        vmImage: ubuntu-latest
-      # Records deployment against bookings resource - Kubernetes namespace.
-      environment: 'Staging'
-      strategy: 
-        runOnce:
-          deploy:
-            steps:
-            - task: KubernetesManifest@0
-              displayName: Deploy to Kubernetes cluster
-              inputs:
-                action: deploy
+# - stage: Staging
+#   jobs:
+#     - deployment: Deploy
+#       displayName: deploy Web App
+#       pool:
+#         vmImage: ubuntu-latest
+#       # Records deployment against bookings resource - Kubernetes namespace.
+#       environment: 'Staging'
+#       strategy: 
+#         runOnce:
+#           deploy:
+#             steps:
+#             - task: KubernetesManifest@0
+#               displayName: Deploy to Kubernetes cluster
+#               inputs:
+#                 action: deploy
+
                 # namespace: $(k8sNamespace)
-                kubernetesServiceConnection: 'Staging-documentAnalyzer-staging-default-1624569679388'
+                # kubernetesServiceConnection: 'Staging-documentAnalyzer-staging-default-1624569679388'
                 # manifests: |
                 #   $(System.ArtifactsDirectory)/manifests/*
                 # imagePullSecrets: |

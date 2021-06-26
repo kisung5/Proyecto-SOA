@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mssql
+spec:
+  ports:
+  - port: 1433
+  selector:
+    app: mssql
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mssql
+spec:
+  selector:
+    matchLabels:
+      app: mssql
+  # strategy:
+  #   type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mssql
+    spec:
+      containers:
+      - name: mssql
+        image: mcr.microsoft.com/mssql/server
+        imagePullPolicy: Never
+        ports:
+        - name: mssql
+          containerPort: 1433
+        # volumeMounts:
+        #   - name: mssql-persistent-storage
+        #     mountPath: /var/opt/mssql/data/
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mssqlcreds
+              key: password
+        - name: MSSQL_PID
+          value: Developer
+      # volumes:
+      #   - name: mssql-persistent-storage
+      #     persistentVolumeClaim:
+      #       claimName: mssql-pv-claim
